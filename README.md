@@ -1,4 +1,4 @@
-# YouTube Looper Helper
+# Looper Helper
 -----------------------
 
 ## About
