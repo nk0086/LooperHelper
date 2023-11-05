@@ -1,0 +1,30 @@
+{
+  "manifest_version": 3,
+  "name": "YouTube Looper Helper",
+  "version": "1.0",
+  "description": "https://wiz.ooo/life/youtube-looperに再生リストを追加する拡張機能です。",
+  "permissions": [
+    "storage",
+    "activeTab"
+  ],
+  "content_scripts": [
+    {
+      "matches": ["https://wiz.ooo/life/youtube-looper*"],
+      "js": ["src/content/content.js"]
+    }
+  ],
+  "action": {
+    "default_popup": "src/popup/popup.html",
+    "default_icon": {
+      "16": "images/icon.png",
+      "48": "images/icon.png",
+      "128": "images/icon.png"
+    }
+  },
+  "icons": {
+    "16": "images/icon.png",
+    "48": "images/icon.png",
+    "128": "images/icon.png"
+  }
+}
+
