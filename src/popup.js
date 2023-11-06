@@ -27,6 +27,7 @@ document.getElementById('saveCurrentLoop').addEventListener('click', function ()
         }
     });
 });
+
 function renderSavedLoops(loops) {
     var ul = document.getElementById('savedLoops');
     ul.innerHTML = ''; // 既存のリストをクリア
@@ -49,6 +50,12 @@ function renderSavedLoops(loops) {
         ul.appendChild(li);
     });
 }
+
+document.getElementById('clearSavedLoops').addEventListener('click', function () {
+    chrome.storage.local.set({ loops: [] });
+})
+
+
 // 初期ロード時に保存されたループ情報を表示
 chrome.storage.local.get('loops', function (data) {
     var loops = data.loops || [];
