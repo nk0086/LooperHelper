@@ -12,6 +12,7 @@ document.getElementById('saveCurrentLoop').addEventListener('click', function ()
                 if (response) {
                     var newLoop_1 = {
                         id: Date.now(),
+                        name: loopName.value,
                         url: response.url,
                         start: response.start,
                         end: response.end
@@ -33,7 +34,7 @@ function renderSavedLoops(loops) {
     ul.innerHTML = ''; // 既存のリストをクリア
     loops.forEach(function (loop) {
         var li = document.createElement('li');
-        li.textContent = "ID: ".concat(loop.id);
+        li.textContent = loop.name;
         li.addEventListener('click', function () {
             // 現在のタブの情報を取得
             chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
