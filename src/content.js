@@ -1,37 +1,39 @@
-console.log("Content script is loaded and running!");
+// メッセージリスナーを設定
 chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
-    console.log("Retrieved message:", message);
-    // setLoopInfo アクションの処理
-    if (message.action === 'setLoopInfo') {
-        // 入力フィールドに情報をセット
-        var urlField = document.querySelector('#youtube-video-url');
-        var startField = document.querySelector('#youtube-video-start');
-        var endField = document.querySelector('#youtube-video-end');
-        if (urlField && startField && endField) {
-            urlField.value = message.data.url;
-            startField.value = message.data.start;
-            endField.value = message.data.end;
-            sendResponse({ success: true });
-        }
-        else {
-            sendResponse({ success: false });
-        }
-        return;
-    }
-    // getLoopInfo アクションの処理
+    // getLoopInfo アクションの場合
     if (message.action === 'getLoopInfo') {
-        // 指定のIDからデータを取得
-        var urlField = document.querySelector('#youtube-video-url');
-        var startField = document.querySelector('#youtube-video-start');
-        var endField = document.querySelector('#youtube-video-end');
-        var data = {
-            url: urlField ? urlField.value : null,
-            start: startField ? startField.value : null,
-            end: endField ? endField.value : null
-        };
-        // console.log("Data to send from content script:", data);
-        sendResponse(data);
-        return;
+        // ページから情報を取得
+        const startTimeInput = document.getElementById('loop-slider-start-time-0');
+        const endTimeInput = document.getElementById('loop-slider-end-time-0');
+        // const titleElement = document.querySelector('h1.title') || document.querySelector('title'); // 適切なセレクタに更新してください
+        const titleElement = document.querySelector('.style-scope ytd-watch-metadata .title') || document.querySelector('title');
+        // 取得した情報をレスポンスとして返す
+        sendResponse({
+            start: startTimeInput ? startTimeInput.value : '',
+            end: endTimeInput ? endTimeInput.value : '',
+            title: titleElement ? titleElement.textContent : ''
+        });
+
+        return true; // 非同期レスポンスのためにtrueを返す
     }
-    return true;
+
+    // setLoopInfo アクションの場合
+    if (message.action === 'setLoopInfo') {
+        // ページの要素に情報を設定
+        const startTimeInput = document.getElementById('loop-slider-start-time-0');
+        const endTimeInput = document.getElementById('loop-slider-end-time-0');
+        const titleElement = document.querySelector('h1.title') || document.querySelector('title'); // 適切なセレクタに更新してください
+
+        if (startTimeInput && endTimeInput && titleElement) {
+            startTimeInput.value = message.data.start;
+            endTimeInput.value = message.data.end;
+
+            sendResponse({ success: true });
+        } else {
+            sendResponse({ success: false, message: 'Required elements not found on the page.' });
+        }
+
+        return true; // 非同期レスポンスのためにtrueを返す
+    }
 });
+
